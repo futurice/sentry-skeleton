@@ -1,0 +1,9 @@
+#!/bin/bash
+#virtualenv py3venv -p /usr/local/bin/python3.5
+#./py3venv/bin/pip install secret
+./py3venv/bin/secret get ssh_key > secrets/ssh_key
+chmod 0600 secrets/ssh_key
+ANSIBLE_SSH_ARGS="-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s" \
+ANSIBLE_ROLES_PATH=/code/roles/ ansible-playbook deploy.yml -i inventory \
+--private-key=secrets/ssh_key
+
